@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:wasteagram/models/food_waste_post.dart';
+import '../models/food_waste_post.dart';
 import '../models/collection.dart';
 import '../components/format_functions.dart';
 import '../components/navigator.dart';

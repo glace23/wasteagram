@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:wasteagram/models/collection.dart';
-import 'package:wasteagram/components/navigator.dart';
-import 'package:wasteagram/models/food_waste_post.dart';
+import '../models/collection.dart';
+import '../components/navigator.dart';
+import '../models/food_waste_post.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({Key? key}) : super(key: key);

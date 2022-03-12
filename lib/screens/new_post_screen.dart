@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wasteagram/models/collection.dart';
-import 'package:wasteagram/components/navigator.dart';
-import 'package:wasteagram/models/food_waste_post.dart';
-import 'package:wasteagram/scaffold/wasteagram_scaffold.dart';
-import 'package:wasteagram/components/PickImage.dart';
-
+import '../models/collection.dart';
+import '../components/navigator.dart';
+import '../models/food_waste_post.dart';
+import '../scaffold/wasteagram_scaffold.dart';
+import '../components/PickImage.dart';
 import '../components/format_functions.dart';
 
 class NewPostScreen extends StatefulWidget {

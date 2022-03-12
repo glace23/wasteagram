@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wasteagram/components/PickImage.dart';
-import 'package:wasteagram/models/food_waste_post.dart';
-import 'package:wasteagram/screens/new_post_screen.dart';
-import 'package:wasteagram/screens/read_post_screen.dart';
+import '../components/PickImage.dart';
+import '../models/food_waste_post.dart';
+import '../screens/new_post_screen.dart';
+import '../screens/read_post_screen.dart';
 
 void toAddNewPostScreen(BuildContext context, dynamic image) {
   Navigator.of(context).push(MaterialPageRoute(
