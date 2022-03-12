@@ -3,8 +3,7 @@ import 'package:wasteagram/components/PickImage.dart';
 import 'package:wasteagram/models/FoodWastePost.dart';
 import 'package:wasteagram/screens/new_post_screen.dart';
 import 'package:wasteagram/screens/read_post_screen.dart';
-
-import '../screens/list_screen_decap.dart';
+import 'package:wasteagram/screens/list_screen.dart';
 
 void toAddNewPostScreen(BuildContext context, dynamic image) {
   Navigator.of(context).push(MaterialPageRoute(
