@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:wasteagram/models/collection.dart';
 import 'package:wasteagram/components/navigator.dart';
-import 'package:wasteagram/models/FoodWastePost.dart';
+import 'package:wasteagram/models/food_waste_post.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({Key? key}) : super(key: key);
@@ -17,7 +18,8 @@ class _ListScreenState extends State<ListScreen> {
 
   Widget listBuilder() {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+      stream:
+          FirebaseFirestore.instance.collection(Collection().name).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasData &&
             snapshot.data!.docs != null &&

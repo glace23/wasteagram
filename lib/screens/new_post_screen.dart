@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:share/share.dart';
+import 'package:wasteagram/models/collection.dart';
 import 'package:wasteagram/components/navigator.dart';
-import 'package:wasteagram/models/FoodWastePost.dart';
+import 'package:wasteagram/models/food_waste_post.dart';
 import 'package:wasteagram/scaffold/wasteagram_scaffold.dart';
 import 'package:wasteagram/components/PickImage.dart';
 
@@ -39,6 +39,12 @@ class _NewPostScreenState extends State<NewPostScreen> {
         _serviceEnabled = await locationService.requestService();
         if (!_serviceEnabled) {
           print('Failed to enable service. Returning.');
+          // Prompt user location service permission not enabled
+          popUpDialogue(
+              title: "Location Service Not Enabled!",
+              description:
+                  "Location Service Not Enabled! Please enable location Service in the settings!",
+              context: context);
           return;
         }
       }
@@ -48,9 +54,15 @@ class _NewPostScreenState extends State<NewPostScreen> {
         _permissionGranted = await locationService.requestPermission();
         if (_permissionGranted != PermissionStatus.granted) {
           print('Location service permission not granted. Returning.');
+          // Prompt user location service permission not granted
+          popUpDialogue(
+              title: "Location Service Permission Denied!",
+              description:
+                  "Location service premission not granted! Please enable permission to use location Service!",
+              context: context);
+          return;
         }
       }
-
       locationData = await locationService.getLocation();
     } on PlatformException catch (e) {
       print('Error: ${e.toString()}, code: ${e.code}');
@@ -165,7 +177,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
       foodWastePost.imageURL = await PickImage().getImageURL(widget.image);
       foodWastePost.dateTime = DateTime.now();
 
-      FirebaseFirestore.instance.collection('posts').add({
+      FirebaseFirestore.instance.collection(Collection().name).add({
         'title': foodWastePost.title,
         'imageURL': foodWastePost.imageURL,
         'quantity': foodWastePost.quantity,
@@ -252,5 +264,32 @@ class _NewPostScreenState extends State<NewPostScreen> {
     } else {
       return null;
     }
+  }
+
+  Future<String?> popUpDialogue({
+    required String title,
+    required String description,
+    required BuildContext context,
+  }) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(title),
+        content: Text(description),
+        actions: <Widget>[
+          FractionallySizedBox(
+            alignment: Alignment.centerLeft,
+            widthFactor: 1,
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+                backToLastScreen(context);
+              },
+              child: const Text('OK'),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

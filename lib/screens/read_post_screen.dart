@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:wasteagram/models/FoodWastePost.dart';
+import 'package:wasteagram/models/food_waste_post.dart';
+import '../models/collection.dart';
 import '../components/format_functions.dart';
 import '../components/navigator.dart';
 import '../scaffold/wasteagram_scaffold.dart';
-import 'dart:io';
 
 class ReadPostScreen extends StatefulWidget {
   final FoodWastePost foodWastePost;
@@ -106,7 +106,7 @@ class _ReadPostScreen extends State<ReadPostScreen> {
 
   void deletePost() {
     FirebaseFirestore.instance
-        .collection('posts')
+        .collection(Collection().name)
         .doc(widget.foodWastePost.id)
         .delete();
     backToLastScreen(context);

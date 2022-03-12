@@ -1,30 +1,56 @@
-// // This is a basic Flutter widget test.
-// //
-// // To perform an interaction with a widget in your test, use the WidgetTester
-// // utility that Flutter provides. For example, you can send tap and scroll
-// // gestures. You can also use WidgetTester to find child widgets in the widget
-// // tree, read text, and verify that the values of widget properties are correct.
+import 'package:flutter_test/flutter_test.dart';
+import 'package:wasteagram/models/food_waste_post.dart';
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
+void main() {
+  test('Expect created post should equal to the assigned value', () {
+    const title = 'Hello World';
+    final dateTime = DateTime.now();
+    const imageURL = 'Dummy URL';
+    const quantity = 1;
+    const latitude = 1.0;
+    const longitude = 2.0;
 
-// import 'package:wasteagram/main.dart';
+    final foodWastePost = FoodWastePost(
+      title: title,
+      imageURL: imageURL,
+      quantity: quantity,
+      longitude: longitude,
+      latitude: latitude,
+      dateTime: dateTime,
+    );
 
-// void main() {
-//   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-//     // Build our app and trigger a frame.
-//     await tester.pumpWidget(const MyApp());
+    expect(foodWastePost.title, title);
+    expect(foodWastePost.imageURL, imageURL);
+    expect(foodWastePost.quantity, quantity);
+    expect(foodWastePost.latitude, latitude);
+    expect(foodWastePost.longitude, longitude);
+    expect(foodWastePost.dateTime, dateTime);
+    print("Finish Test 1");
+  });
 
-//     // Verify that our counter starts at 0.
-//     expect(find.text('0'), findsOneWidget);
-//     expect(find.text('1'), findsNothing);
+  test('Expect created post should not equal to the assigned value', () {
+    const title = 'Oregon State University';
+    final dateTime = DateTime.now();
+    const imageURL = 'Dummy URL';
+    const quantity = 100;
+    const latitude = 5.0;
+    const longitude = 3.0;
 
-//     // Tap the '+' icon and trigger a frame.
-//     await tester.tap(find.byIcon(Icons.add));
-//     await tester.pump();
+    final foodWastePost = FoodWastePost(
+      title: title,
+      imageURL: imageURL,
+      quantity: quantity,
+      longitude: longitude,
+      latitude: latitude,
+      dateTime: dateTime,
+    );
 
-//     // Verify that our counter has incremented.
-//     expect(find.text('0'), findsNothing);
-//     expect(find.text('1'), findsOneWidget);
-//   });
-// }
+    expect(foodWastePost.title, title);
+    expect(foodWastePost.imageURL, isNot(imageURL.hashCode.toString()));
+    expect(foodWastePost.quantity, quantity);
+    expect(foodWastePost.latitude, latitude);
+    expect(foodWastePost.longitude, longitude);
+    expect(foodWastePost.dateTime, dateTime);
+    print("Finish Test 2");
+  });
+}
