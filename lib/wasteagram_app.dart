@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListScreen(preferences: preferences);
+    return VerticalLayout(preferences: preferences);
   }
 
   Future<ValueNotifier<ThemeMode>> getThemeState() async {

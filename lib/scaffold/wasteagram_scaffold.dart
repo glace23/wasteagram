@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wasteagram/models/collection.dart';
 import 'theme_switch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,7 +16,7 @@ Scaffold wasteagramScaffold({
 }) {
   return Scaffold(
     appBar: AppBar(
-      title: quantityCounter(),
+      title: Column(children: [const Text('Wastagram'), quantityCounter()]),
       centerTitle: true,
     ),
     body: screen,
@@ -35,7 +36,8 @@ Scaffold wasteagramScaffold({
 
 Widget quantityCounter() {
   return StreamBuilder(
-    stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+    stream:
+        FirebaseFirestore.instance.collection(Collection().name).snapshots(),
     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
       if (snapshot.hasData &&
           snapshot.data!.docs != null &&
@@ -44,9 +46,15 @@ Widget quantityCounter() {
         for (var element in snapshot.data!.docs) {
           quantity += int.parse(element.get('quantity').toString());
         }
-        return Text('Wasteagram  CNT: ${quantity.toString()}');
+        return Text(
+          'Waste Count: ${quantity.toString()}',
+          style: const TextStyle(color: Colors.red),
+        );
       }
-      return const Text('Wasteagram');
+      return const Text(
+        'Count: 0',
+        style: TextStyle(color: Colors.green),
+      );
     },
   );
 }
