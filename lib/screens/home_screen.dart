@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wasteagram/components/navigator.dart';
-import 'package:wasteagram/scaffold/wasteagram_scaffold.dart';
-import 'package:wasteagram/screens/list_screen.dart';
+import '../components/navigator.dart';
+import '../scaffold/wasteagram_scaffold.dart';
+import '../screens/list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final SharedPreferences preferences;

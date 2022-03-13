@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/PickImage.dart';
+import 'pick_image.dart';
 import '../models/food_waste_post.dart';
 import '../screens/new_post_screen.dart';
 import '../screens/read_post_screen.dart';

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/collection.dart';
 import '../components/navigator.dart';
+import '../models/collection.dart';
 import '../models/food_waste_post.dart';
 
 class ListScreen extends StatefulWidget {

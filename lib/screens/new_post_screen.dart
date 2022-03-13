@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import '../models/collection.dart';
+import 'package:location/location.dart';
+import '../components/format_functions.dart';
 import '../components/navigator.dart';
+import '../components/pick_image.dart';
+import '../models/collection.dart';
 import '../models/food_waste_post.dart';
 import '../scaffold/wasteagram_scaffold.dart';
-import '../components/PickImage.dart';
-import '../components/format_functions.dart';
 
 class NewPostScreen extends StatefulWidget {
   final dynamic image;
