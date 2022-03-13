@@ -31,6 +31,16 @@ class _NewPostScreenState extends State<NewPostScreen> {
     retrieveLocation();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return wasteagramScaffold(
+        title: 'Create New Post',
+        screen: newPostBody(),
+        navigation: backToLastScreen,
+        haveButton: false,
+        icon: const Icon(Icons.arrow_back));
+  }
+
   void retrieveLocation() async {
     try {
       var _serviceEnabled = await locationService.serviceEnabled();
@@ -71,24 +81,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return wasteagramScaffold(
-        title: 'Create New Post',
-        screen: newPostBody(),
-        navigation: backToLastScreen,
-        icon: const Icon(Icons.arrow_back));
-  }
-
-  // Widget postOrientation() {
-  //   if (MediaQuery.of(context).size.width <
-  //       MediaQuery.of(context).size.height) {
-  //     return newPostBody();
-  //   } else {
-  //     return newPostBodyHortizontal();
-  //   }
-  // }
-
   Widget newPostBody() {
     if (locationData == null) {
       return const Center(child: CircularProgressIndicator());
@@ -96,78 +88,47 @@ class _NewPostScreenState extends State<NewPostScreen> {
       return ListView(children: [
         Form(
           key: formKey,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  child: formWidgetPadding(
-                    formWidget: Image.file(widget.image),
-                    padding: 10,
-                  ),
-                  height: getScreenHeight(context) / 3,
-                ),
-                formWidgetPadding(formWidget: postTitle(), padding: 10),
-                formWidgetPadding(formWidget: postQuantity(), padding: 10),
-                formWidgetPadding(formWidget: postLongitude(), padding: 10),
-                formWidgetPadding(formWidget: postLatitude(), padding: 10),
-                SizedBox(
-                  child: ElevatedButton(
-                    child: const Text('Upload'),
-                    onPressed: () {
-                      // Share.shareFiles([image!.path],
-                      //     text:
-                      //         "Hey my location is ${locationData!.longitude}, ${locationData!.latitude}");
-                      uploadData();
-                    },
-                  ),
-                  width: getScreenWidth(context) / 2,
-                ),
-              ]),
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: <
+              Widget>[
+            Semantics(
+              child: postImage(),
+              image: true,
+              label: "An image of waste",
+            ),
+            Semantics(
+              child: formWidgetPadding(formWidget: postTitle(), padding: 10),
+              label: "User input title for post",
+              readOnly: false,
+            ),
+            Semantics(
+              child: formWidgetPadding(formWidget: postQuantity(), padding: 10),
+              label: "User input count of waste for post",
+              readOnly: false,
+              value: "Digits only",
+            ),
+            Semantics(
+              child:
+                  formWidgetPadding(formWidget: postLongitude(), padding: 10),
+              label: "User longitude value for post",
+              readOnly: true,
+            ),
+            Semantics(
+              child: formWidgetPadding(formWidget: postLatitude(), padding: 10),
+              label: "User latitude value for post",
+              readOnly: true,
+            ),
+            Semantics(
+              child: postUpload(),
+              label: "Uploads data to firestore",
+              onTapHint:
+                  "Uploads data to firestore database collection Collection().name",
+              onTap: uploadData,
+            ),
+          ]),
         ),
       ]);
     }
   }
-
-  // Widget newPostBodyHortizontal() {
-  //   if (locationData == null) {
-  //     return const Center(child: CircularProgressIndicator());
-  //   } else {
-  //     return ListView(children: [
-  //       Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-  //         SizedBox(
-  //           child: Image.file(
-  //             widget.image,
-  //             width: getSize(context),
-  //             height: getSize(context) / 1.5,
-  //           ),
-  //         ),
-  //         Form(
-  //           key: formKey,
-  //           child: Column(children: [
-  //             SizedBox(child: postTitle()),
-  //             SizedBox(
-  //                 child: Text(
-  //               "${locationData!.longitude}\n${locationData!.latitude}",
-  //               style: Theme.of(context).textTheme.headline4,
-  //             )),
-  //             SizedBox(
-  //               child: ElevatedButton(
-  //                 child: const Text('Upload'),
-  //                 onPressed: () {
-  //                   // Share.shareFiles([image!.path],
-  //                   //     text:
-  //                   //         "Hey my location is ${locationData!.longitude}, ${locationData!.latitude}");
-  //                   uploadData();
-  //                 },
-  //               ),
-  //               width: getSize(context) / 2,
-  //             ),
-  //           ]),
-  //         ),
-  //       ]),
-  //     ]);
-  //   }
-  // }
 
   void uploadData() async {
     if (formKey.currentState!.validate()) {
@@ -186,6 +147,16 @@ class _NewPostScreenState extends State<NewPostScreen> {
       });
       backToLastScreen(context);
     }
+  }
+
+  Widget postImage() {
+    return SizedBox(
+      child: formWidgetPadding(
+        formWidget: Image.file(widget.image),
+        padding: 10,
+      ),
+      height: getScreenHeight(context) / 3,
+    );
   }
 
   Widget postTitle() {
@@ -217,6 +188,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
         foodWastePost.quantity = int.parse(value!);
       },
       validator: (value) => validator(value, text),
+      keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
     );
   }
@@ -254,6 +226,18 @@ class _NewPostScreenState extends State<NewPostScreen> {
       },
       validator: (value) => validator(value, text),
       readOnly: true,
+    );
+  }
+
+  Widget postUpload() {
+    return SizedBox(
+      child: ElevatedButton(
+        child: const Text('Upload'),
+        onPressed: () {
+          uploadData();
+        },
+      ),
+      width: getScreenWidth(context) / 2,
     );
   }
 

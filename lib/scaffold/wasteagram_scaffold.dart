@@ -16,7 +16,7 @@ Scaffold wasteagramScaffold({
 }) {
   return Scaffold(
     appBar: AppBar(
-      title: Column(children: [const Text('Wastagram'), quantityCounter()]),
+      title: Column(children: [const Text('Wasteagram'), quantityCounter()]),
       centerTitle: true,
     ),
     body: screen,

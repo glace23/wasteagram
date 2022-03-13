@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import '../models/collection.dart';
 import '../components/navigator.dart';
 import '../models/food_waste_post.dart';
@@ -18,8 +19,10 @@ class _ListScreenState extends State<ListScreen> {
 
   Widget listBuilder() {
     return StreamBuilder(
-      stream:
-          FirebaseFirestore.instance.collection(Collection().name).snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection(Collection().name)
+          .orderBy('dateTime', descending: true)
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasData &&
             snapshot.data!.docs != null &&
@@ -39,10 +42,9 @@ class _ListScreenState extends State<ListScreen> {
                 foodWastePost.id = post.id;
 
                 return ListTile(
-                  title: Text(foodWastePost.title!),
-                  subtitle: Text(
-                      "Date: ${foodWastePost.dateTime!.toString().substring(0, 10)}, Quantity ${foodWastePost.quantity}, "
-                      "\nLocation: ${foodWastePost.longitude}, ${foodWastePost.latitude}"),
+                  title:
+                      Text(DateFormat.yMMMd().format(foodWastePost.dateTime!)),
+                  subtitle: Text("Count: ${foodWastePost.quantity}"),
                   onTap: () {
                     toReadPostScreen(context, foodWastePost);
                   },

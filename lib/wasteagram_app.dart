@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/vertical_layout.dart';
+import 'screens/home_screen.dart';
 
 class MyApp extends StatelessWidget {
   final SharedPreferences preferences;
@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return VerticalLayout(preferences: preferences);
+    return HomeScreen(preferences: preferences);
   }
 
   Future<ValueNotifier<ThemeMode>> getThemeState() async {

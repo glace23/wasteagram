@@ -4,15 +4,15 @@ import 'package:wasteagram/components/navigator.dart';
 import 'package:wasteagram/scaffold/wasteagram_scaffold.dart';
 import 'package:wasteagram/screens/list_screen.dart';
 
-class VerticalLayout extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   final SharedPreferences preferences;
-  const VerticalLayout({Key? key, required this.preferences}) : super(key: key);
+  const HomeScreen({Key? key, required this.preferences}) : super(key: key);
 
   @override
-  State<VerticalLayout> createState() => _VerticalLayout();
+  State<HomeScreen> createState() => _HomeScreen();
 }
 
-class _VerticalLayout extends State<VerticalLayout> {
+class _HomeScreen extends State<HomeScreen> {
   final ValueNotifier<ThemeMode> _notifier = ValueNotifier(ThemeMode.light);
 
   @override
