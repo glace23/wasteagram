@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +31,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
   @override
   void initState() {
     super.initState();
+    retrieveLocation();
   }
 
   @override
@@ -47,7 +50,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
       if (!_serviceEnabled) {
         _serviceEnabled = await locationService.requestService();
         if (!_serviceEnabled) {
-          print('Failed to enable service. Returning.');
           // Prompt user location service permission not enabled
           popUpDialogue(
               title: "Location Service Not Enabled!",
@@ -62,7 +64,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
       if (_permissionGranted == PermissionStatus.denied) {
         _permissionGranted = await locationService.requestPermission();
         if (_permissionGranted != PermissionStatus.granted) {
-          print('Location service permission not granted. Returning.');
           // Prompt user location service permission not granted
           popUpDialogue(
               title: "Location Service Permission Denied!",
@@ -82,52 +83,66 @@ class _NewPostScreenState extends State<NewPostScreen> {
   }
 
   Widget newPostBody() {
-    return Stack(children: [
-      ListView(children: [
-        Form(
-          key: formKey,
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: <
-              Widget>[
-            Semantics(
-              child: postImage(),
-              image: true,
-              label: "An image of waste",
-            ),
-            Semantics(
-              child: formWidgetPadding(formWidget: postTitle(), padding: 10),
-              label: "User input title for post",
-              readOnly: false,
-            ),
-            Semantics(
-              child: formWidgetPadding(formWidget: postQuantity(), padding: 10),
-              label: "User input count of waste for post",
-              readOnly: false,
-              value: "Digits only",
-            ),
-            Semantics(
-              child: postUpload(),
-              label: "Uploads data to firestore",
-              onTapHint:
-                  "Uploads data to firestore database collection Collection().name",
-              onTap: uploadData,
-            ),
-          ]),
-        ),
-      ]),
-      if (upload == true) Container(color: Colors.grey.withOpacity(0.5)),
-      if (upload == true) const Center(child: CircularProgressIndicator()),
-    ]);
+    if (locationData == null) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      return Stack(children: [
+        ListView(children: [
+          Form(
+            key: formKey,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: <
+                    Widget>[
+              Semantics(
+                child: postImage(),
+                image: true,
+                label: "An image of waste",
+              ),
+              Semantics(
+                child: formWidgetPadding(formWidget: postTitle(), padding: 10),
+                label: "User input title for post",
+                readOnly: false,
+              ),
+              Semantics(
+                child:
+                    formWidgetPadding(formWidget: postQuantity(), padding: 10),
+                label: "User input count of waste for post",
+                readOnly: false,
+                value: "Digits only",
+              ),
+              Semantics(
+                child:
+                    formWidgetPadding(formWidget: postLongitude(), padding: 10),
+                label: "User longitude",
+                readOnly: false,
+              ),
+              Semantics(
+                child:
+                    formWidgetPadding(formWidget: postLatitude(), padding: 10),
+                label: "User latitude",
+                readOnly: false,
+              ),
+              Semantics(
+                child: postUpload(),
+                label: "Uploads data to firestore",
+                onTapHint:
+                    "Uploads data to firestore database collection Collection().name",
+                onTap: uploadData,
+              ),
+            ]),
+          ),
+        ]),
+        if (upload == true) Container(color: Colors.grey.withOpacity(0.5)),
+        if (upload == true) const Center(child: CircularProgressIndicator()),
+      ]);
+    }
   }
 
   void uploadData() async {
     if (formKey.currentState!.validate()) {
-      upload = true;
       formKey.currentState?.save();
 
-      retrieveLocation();
       foodWastePost.imageURL = await PickImage().getImageURL(widget.image);
-      foodWastePost.longitude = locationData!.longitude;
-      foodWastePost.latitude = locationData!.latitude;
       foodWastePost.dateTime = DateTime.now();
 
       FirebaseFirestore.instance.collection(Collection().name).add({
@@ -227,6 +242,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
       child: ElevatedButton(
         child: const Text('Upload'),
         onPressed: () {
+          upload = true;
+          setState(() {});
           uploadData();
         },
       ),
