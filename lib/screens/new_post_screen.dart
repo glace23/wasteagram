@@ -24,11 +24,11 @@ class _NewPostScreenState extends State<NewPostScreen> {
   final picker = ImagePicker();
   final formKey = GlobalKey<FormState>();
   FoodWastePost foodWastePost = FoodWastePost();
+  bool upload = false;
 
   @override
   void initState() {
     super.initState();
-    retrieveLocation();
   }
 
   @override
@@ -82,10 +82,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
   }
 
   Widget newPostBody() {
-    if (locationData == null) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      return ListView(children: [
+    return Stack(children: [
+      ListView(children: [
         Form(
           key: formKey,
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: <
@@ -107,17 +105,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
               value: "Digits only",
             ),
             Semantics(
-              child:
-                  formWidgetPadding(formWidget: postLongitude(), padding: 10),
-              label: "User longitude value for post",
-              readOnly: true,
-            ),
-            Semantics(
-              child: formWidgetPadding(formWidget: postLatitude(), padding: 10),
-              label: "User latitude value for post",
-              readOnly: true,
-            ),
-            Semantics(
               child: postUpload(),
               label: "Uploads data to firestore",
               onTapHint:
@@ -126,15 +113,21 @@ class _NewPostScreenState extends State<NewPostScreen> {
             ),
           ]),
         ),
-      ]);
-    }
+      ]),
+      if (upload == true) Container(color: Colors.grey.withOpacity(0.5)),
+      if (upload == true) const Center(child: CircularProgressIndicator()),
+    ]);
   }
 
   void uploadData() async {
     if (formKey.currentState!.validate()) {
+      upload = true;
       formKey.currentState?.save();
 
+      retrieveLocation();
       foodWastePost.imageURL = await PickImage().getImageURL(widget.image);
+      foodWastePost.longitude = locationData!.longitude;
+      foodWastePost.latitude = locationData!.latitude;
       foodWastePost.dateTime = DateTime.now();
 
       FirebaseFirestore.instance.collection(Collection().name).add({
@@ -145,8 +138,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
         'latitude': foodWastePost.latitude,
         'dateTime': foodWastePost.dateTime,
       });
-      backToLastScreen(context);
-    }
+    } else {}
+    backToLastScreen(context);
   }
 
   Widget postImage() {
